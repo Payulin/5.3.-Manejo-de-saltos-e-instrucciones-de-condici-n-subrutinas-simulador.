@@ -1,0 +1,46 @@
+	AREA |.text|, CODE, READONLY, ALIGN =2
+	THUMB
+	EXPORT Start
+		
+Start
+
+	VMOV.F32 S1, #-1; Valor que multiplicará -1 la cantidad de veces necesarias
+	VMOV.F32 S2, #-1; Valor de -1 afectado por la potencia
+	VMOV.F32 S3, #2; El 2 del divisor
+	VMOV.F32 S4, #1;Parte de la potencia que suma 1
+	VMOV.F32 S9, #4; Valor final por el que se multiplica la sumatoria
+	MOV R1, #0;; Contador del número de iteraciones.
+	B PI
+	
+PI
+	VMUL.F32 S2, S1; Multiplica (-1)(-1) n cantidad de veces
+	B Resta; Realiza el salto a Resta
+	
+Resta
+
+	VADD.F32 S5,S4; Realiza la operación S5=S5*S4
+	VMUL.F32 S6,S3, S5;  Multiplica S3*S5=S6
+	VADD.F32 S6, S1; Suma el valor S1+S6 asinandolo en S6
+	B Division
+	
+Division
+	VDIV.F32 S7, S2, S6
+	VADD.F32 S8, S7;
+	B SeriePI
+	
+SeriePI
+	ADD R1, #1
+	CMP R1, #100
+	BEQ Multiplicacion
+	B PI
+	
+Multiplicacion
+	VMOV.F32 S9, #4
+	VMUL.F32 S18, S8, S9
+	B Stop
+	
+Stop B Stop
+	
+	ALIGN
+	END
+	
